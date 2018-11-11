@@ -63,10 +63,10 @@ class UsersController < ApplicationController
   end
 
   def login
-    @user = User.find_by(email: params[:email], password: params[:password])
-    if @user
+    @user = User.find_by(email: params[:email])
+    if @user 
       session[:user_id] = @user.id
-      flash[:notice] = "ログインしました"
+      flash[:notice] = "Login succeeded"
       redirect_to("/posts/index")
     else
       @error_message = "メールアドレスまたはパスワードが間違っています"
@@ -78,8 +78,13 @@ class UsersController < ApplicationController
 
   def logout
     session[:user_id] = nil
-    flash[:notice] = "ログアウトしました"
+    flash[:notice] = "You have logged out successfully"
     redirect_to("/login")
+  end
+
+  def likes
+    @user = User.find_by(id: params[:id])
+    @likes = Like.where(user_id: @user.id)
   end
 
 end
